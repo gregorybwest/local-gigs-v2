@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_18_050724) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_08_051458) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+  enable_extension "postgis"
 
   create_table "events", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -36,5 +37,17 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_18_050724) do
     t.datetime "updated_at", null: false
     t.string "user_name", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+  end
+
+  create_table "venues", force: :cascade do |t|
+    t.string "address"
+    t.string "city"
+    t.geography "coordinates", limit: {srid: 4326, type: "st_point", geographic: true}
+    t.datetime "created_at", null: false
+    t.string "image_url"
+    t.integer "mapbox_id"
+    t.string "name"
+    t.datetime "updated_at", null: false
+    t.index ["coordinates"], name: "index_venues_on_coordinates", using: :gist
   end
 end
