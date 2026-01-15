@@ -23,6 +23,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_08_051458) do
     t.string "ticket_link_url"
     t.datetime "updated_at", null: false
     t.integer "user_id"
+    t.string "name"
+    t.text "description"
   end
 
   create_table "users", force: :cascade do |t|
