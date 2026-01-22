@@ -1,6 +1,6 @@
 class CreateVenues < ActiveRecord::Migration[8.1]
   def change
-    # Enable PostGIS extension
+    # Enable PostGIS extension (Supabase supports this)
     enable_extension "postgis" unless extension_enabled?("postgis")
 
     create_table :venues do |t|

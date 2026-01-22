@@ -4,7 +4,7 @@ source "https://rubygems.org"
 gem "rails", "~> 8.1.1"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
-# PostGIS adapter for ActiveRecord
+# PostGIS adapter for ActiveRecord (Supabase supports PostGIS)
 gem "activerecord-postgis-adapter"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
