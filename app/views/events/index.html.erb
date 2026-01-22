@@ -1,14 +1,22 @@
 <% content_for :title, "Events" %>
 
+<% content_for :head do %>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.18.0/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.18.0/mapbox-gl.js"></script>
+<% end %>
+
 <div class="w-full">
   <% if notice.present? %>
     <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
   <% end %>
 
-  <div class="flex justify-between items-center">
+  <div class="flex justify-between items-center mb-6">
     <h1 class="font-bold text-4xl">Events</h1>
     <%= link_to "New event", new_event_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium" %>
   </div>
+
+  <!-- Mapbox Map -->
+  <div id="map" class="w-full rounded-lg shadow-lg mb-8" style="height: 400px;"></div>
 
   <div id="events" class="min-w-full divide-y divide-gray-200 space-y-5">
     <% if @events.any? %>
@@ -27,3 +35,89 @@
     <% end %>
   </div>
 </div>
+
+<script>
+  document.addEventListener('turbo:load', () => {
+    // Check if mapboxgl is loaded
+    if (typeof mapboxgl === 'undefined') {
+      console.error('Mapbox GL JS not loaded');
+      return;
+    }
+
+    // Check if map container exists
+    const mapContainer = document.getElementById('map');
+    if (!mapContainer) {
+      console.error('Map container not found');
+      return;
+    }
+
+    // Clear any existing map instance
+    if (mapContainer._mapboxMap) {
+      mapContainer._mapboxMap.remove();
+    }
+
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZ3JlZy13ZXN0IiwiYSI6ImNrend6cjUzazJzODcycnM4eGhrd3lkcjgifQ.PvbQk3Zd5HwMiLQf0I6GqA';
+    
+    // Default location (fallback)
+    const defaultCenter = [30, 15];
+    const defaultZoom = 1;
+    
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/standard',
+      projection: 'globe',
+      zoom: defaultZoom,
+      center: defaultCenter
+    });
+
+    // Store map instance on container for cleanup
+    mapContainer._mapboxMap = map;
+
+    map.addControl(new mapboxgl.NavigationControl());
+    map.scrollZoom.disable();
+
+    map.on('style.load', () => {
+      map.setFog({});
+    });
+
+    map.on('load', () => {
+      console.log('Map loaded successfully');
+      
+      // Try to get user's location
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const userLocation = [position.coords.longitude, position.coords.latitude];
+            
+            // Fly to user's location with smooth animation
+            map.flyTo({
+              center: userLocation,
+              zoom: 11, // Zoom in to city level
+              essential: true,
+              duration: 2000 // 2 second animation
+            });
+
+            // Add a marker at user's location
+            new mapboxgl.Marker({ color: '#3B82F6' })
+              .setLngLat(userLocation)
+              .setPopup(new mapboxgl.Popup().setHTML('<strong>Your Location</strong>'))
+              .addTo(map);
+            
+            console.log('Centered on user location:', userLocation);
+          },
+          (error) => {
+            console.warn('Geolocation error:', error.message);
+            console.log('Using default location');
+          },
+          {
+            enableHighAccuracy: false,
+            timeout: 5000,
+            maximumAge: 0
+          }
+        );
+      } else {
+        console.log('Geolocation not supported, using default location');
+      }
+    });
+  });
+</script>
