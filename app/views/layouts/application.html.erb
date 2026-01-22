@@ -7,10 +7,20 @@
     <meta name="turbo-refresh-scroll" content="preserve">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://api.mapbox.com;
+      style-src 'self' 'unsafe-inline' https://api.mapbox.com;
+      img-src 'self' data: https: blob:;
+      connect-src 'self' https://api.mapbox.com https://*.tiles.mapbox.com https://events.mapbox.com;
+      worker-src 'self' blob:;
+      child-src 'self' blob:;
+    ">
 
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+    <%= yield :head %>
   </head>
 
   <body>
