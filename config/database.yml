@@ -86,17 +86,13 @@ test:
 production:
   primary:
     <<: *default
-    adapter: postgis
     url: <%= ENV["DATABASE_URL"] %>
   cache:
     <<: *default
-    adapter: postgis
     url: <%= ENV["DATABASE_URL"] %>
   queue:
     <<: *default
-    adapter: postgis
     url: <%= ENV["DATABASE_URL"] %>
   cable:
     <<: *default
-    adapter: postgis
     url: <%= ENV["DATABASE_URL"] %>

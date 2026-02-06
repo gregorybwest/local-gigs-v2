@@ -9,14 +9,10 @@ class CreateVenues < ActiveRecord::Migration[8.1]
       t.string :city
       t.string :image_url
       t.integer :mapbox_id
+      t.st_point :coordinates, geographic: true
 
       t.timestamps
     end
-
-    # Add PostGIS geography column using raw SQL (works without postgis adapter)
-    execute <<-SQL
-      ALTER TABLE venues ADD COLUMN coordinates geography(Point, 4326);
-    SQL
 
     add_index :venues, :coordinates, using: :gist
   end
