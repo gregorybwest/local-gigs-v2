@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :events
   resources :users
-  resources :venues, only: [:index, :create] do
+  resources :venues, only: [ :index, :create ] do
     collection do
       get :search
     end

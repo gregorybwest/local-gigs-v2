@@ -1,5 +1,5 @@
 class VenuesController < ApplicationController
-  skip_forgery_protection only: [:create]
+  skip_forgery_protection only: [ :create ]
 
   def index
     @venues = Venue.all
