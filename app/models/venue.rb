@@ -31,6 +31,7 @@ class Venue < ApplicationRecord
     lng = @longitude_buffer
     return if lat.blank? || lng.blank?
 
-    self.coordinates = RGeo::Geographic.spherical_factory(srid: 4326).point(lng, lat)
+    factory = RGeo::ActiveRecord::SpatialFactoryStore.instance.default
+    self.coordinates = factory.point(lng, lat)
   end
 end
