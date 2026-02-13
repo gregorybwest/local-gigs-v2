@@ -56,7 +56,7 @@
       mapContainer._mapboxMap.remove();
     }
 
-    mapboxgl.accessToken = 'MAPBOX_TOKEN_REMOVED';
+    mapboxgl.accessToken = '<%= Rails.application.credentials.mapbox[:access_token] %>';
     
     // Default location (fallback)
     const defaultCenter = [30, 15];
