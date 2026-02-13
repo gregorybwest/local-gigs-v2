@@ -1,7 +1,7 @@
 class Event < ApplicationRecord
   belongs_to :user
+  belongs_to :venue, optional: true
 
-  validates :mapbox_id, presence: true
   validates :show_time, presence: true
   validates :user_id, presence: true
 

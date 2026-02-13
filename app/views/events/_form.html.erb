@@ -11,9 +11,31 @@
     </div>
   <% end %>
 
-  <div class="my-5">
-    <%= form.label :mapbox_id %>
-    <%= form.text_field :mapbox_id, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": event.errors[:mapbox_id].none?, "border-red-400 focus:outline-red-600": event.errors[:mapbox_id].any?}] %>
+  <div class="my-5" data-controller="venue-search" data-venue-search-url-value="<%= search_venues_path %>">
+    <%= form.label :venue_id, "Venue" %>
+    <%= form.hidden_field :venue_id, data: { venue_search_target: "venueId" } %>
+    <div class="relative">
+      <input type="text"
+        placeholder="Search for a venue..."
+        data-venue-search-target="input"
+        data-action="input->venue-search#search"
+        class="block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-2 w-full"
+        value="<%= event.venue&.name %>"
+        autocomplete="off">
+      <div data-venue-search-target="results"
+        class="hidden absolute z-50 w-full bg-white border border-gray-200 rounded-md shadow-lg mt-1 max-h-60 overflow-y-auto">
+      </div>
+    </div>
+    <div data-venue-search-target="selectedVenue">
+      <% if event.venue.present? %>
+        <div class="flex items-center justify-between bg-blue-50 rounded-md px-3 py-2 mt-2">
+          <span class="text-sm font-medium text-blue-800"><%= event.venue.name %></span>
+          <button type="button" data-action="click->venue-search#clear" class="text-blue-600 hover:text-blue-800 text-sm cursor-pointer">
+            Change
+          </button>
+        </div>
+      <% end %>
+    </div>
   </div>
 
   <div class="my-5">
