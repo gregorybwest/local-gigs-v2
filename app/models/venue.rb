@@ -1,7 +1,7 @@
 class Venue < ApplicationRecord
   has_many :events, dependent: :nullify
 
-  before_validation :set_coordinates_from_lat_lng
+  after_save :update_coordinates_from_lat_lng
 
   validates :name, presence: true
   validates :address, presence: true
@@ -26,12 +26,13 @@ class Venue < ApplicationRecord
 
   private
 
-  def set_coordinates_from_lat_lng
+  def update_coordinates_from_lat_lng
     lat = @latitude_buffer
     lng = @longitude_buffer
     return if lat.blank? || lng.blank?
 
-    factory = RGeo::ActiveRecord::SpatialFactoryStore.instance.default
-    self.coordinates = factory.point(lng, lat)
+    self.class.where(id: id).update_all(
+      Arel.sql("coordinates = ST_SetSRID(ST_MakePoint(#{lng.to_f}, #{lat.to_f}), 4326)::geography")
+    )
   end
 end
