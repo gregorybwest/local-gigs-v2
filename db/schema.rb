@@ -10,21 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_08_051458) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_06_045759) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "postgis"
 
   create_table "events", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.text "description"
     t.string "flier_image_url"
     t.string "mapbox_id"
+    t.string "name"
     t.datetime "show_time"
     t.string "ticket_link_url"
     t.datetime "updated_at", null: false
     t.integer "user_id"
-    t.string "name"
-    t.text "description"
+    t.bigint "venue_id"
+    t.index ["venue_id"], name: "index_events_on_venue_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -47,9 +49,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_08_051458) do
     t.geography "coordinates", limit: {srid: 4326, type: "st_point", geographic: true}
     t.datetime "created_at", null: false
     t.string "image_url"
-    t.integer "mapbox_id"
+    t.string "mapbox_id"
     t.string "name"
     t.datetime "updated_at", null: false
     t.index ["coordinates"], name: "index_venues_on_coordinates", using: :gist
   end
+
+  add_foreign_key "events", "venues"
 end

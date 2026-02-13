@@ -36,32 +36,43 @@
   </div>
 </div>
 
+<%= content_tag :div, id: "events-data", data: {
+  events: @events.select { |e| e.venue&.longitude && e.venue&.latitude }.map { |e|
+    {
+      id: e.id,
+      name: e.name,
+      venue_name: e.venue.name,
+      show_time: e.formatted_show_time,
+      latitude: e.venue.latitude,
+      longitude: e.venue.longitude,
+      url: event_path(e)
+    }
+  }.to_json
+} do %>
+<% end %>
+
 <script>
   document.addEventListener('turbo:load', () => {
-    // Check if mapboxgl is loaded
     if (typeof mapboxgl === 'undefined') {
       console.error('Mapbox GL JS not loaded');
       return;
     }
 
-    // Check if map container exists
     const mapContainer = document.getElementById('map');
-    if (!mapContainer) {
-      console.error('Map container not found');
-      return;
-    }
+    if (!mapContainer) return;
 
-    // Clear any existing map instance
     if (mapContainer._mapboxMap) {
       mapContainer._mapboxMap.remove();
     }
 
     mapboxgl.accessToken = '<%= Rails.application.credentials.mapbox[:access_token] %>';
-    
-    // Default location (fallback)
+
+    const eventsDataEl = document.getElementById('events-data');
+    const events = eventsDataEl ? JSON.parse(eventsDataEl.dataset.events || '[]') : [];
+
     const defaultCenter = [30, 15];
     const defaultZoom = 1;
-    
+
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/standard',
@@ -70,7 +81,6 @@
       center: defaultCenter
     });
 
-    // Store map instance on container for cleanup
     mapContainer._mapboxMap = map;
 
     map.addControl(new mapboxgl.NavigationControl());
@@ -80,44 +90,61 @@
       map.setFog({});
     });
 
-    map.on('load', () => {
-      console.log('Map loaded successfully');
-      
-      // Try to get user's location
+    // Add event markers to the map
+    function addEventMarkers() {
+      const bounds = new mapboxgl.LngLatBounds();
+      let hasMarkers = false;
+
+      events.forEach(event => {
+        if (event.longitude && event.latitude) {
+          const lngLat = [event.longitude, event.latitude];
+
+          const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(`
+            <div class="p-1">
+              <strong>${event.name || event.venue_name}</strong>
+              <p class="text-sm text-gray-600">${event.venue_name}</p>
+              <p class="text-xs text-gray-500">${event.show_time}</p>
+              <a href="${event.url}" class="text-xs text-blue-600 hover:underline">View Event</a>
+            </div>
+          `);
+
+          new mapboxgl.Marker({ color: '#EF4444' })
+            .setLngLat(lngLat)
+            .setPopup(popup)
+            .addTo(map);
+
+          bounds.extend(lngLat);
+          hasMarkers = true;
+        }
+      });
+
+      // If we have event markers, fit the map to show all of them
+      if (hasMarkers) {
+        map.fitBounds(bounds, { padding: 60, maxZoom: 13, duration: 1500 });
+        return;
+      }
+
+      // Otherwise, try user's location
       if ('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
             const userLocation = [position.coords.longitude, position.coords.latitude];
-            
-            // Fly to user's location with smooth animation
             map.flyTo({
               center: userLocation,
-              zoom: 11, // Zoom in to city level
+              zoom: 11,
               essential: true,
-              duration: 2000 // 2 second animation
+              duration: 2000
             });
-
-            // Add a marker at user's location
-            new mapboxgl.Marker({ color: '#3B82F6' })
-              .setLngLat(userLocation)
-              .setPopup(new mapboxgl.Popup().setHTML('<strong>Your Location</strong>'))
-              .addTo(map);
-            
-            console.log('Centered on user location:', userLocation);
           },
-          (error) => {
-            console.warn('Geolocation error:', error.message);
-            console.log('Using default location');
-          },
-          {
-            enableHighAccuracy: false,
-            timeout: 5000,
-            maximumAge: 0
-          }
+          () => { console.log('Using default location'); },
+          { enableHighAccuracy: false, timeout: 5000, maximumAge: 0 }
         );
-      } else {
-        console.log('Geolocation not supported, using default location');
       }
+    }
+
+    map.on('load', () => {
+      console.log('Map loaded successfully');
+      addEventMarkers();
     });
   });
 </script>

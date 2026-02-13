@@ -3,7 +3,7 @@ class EventsController < ApplicationController
 
   # GET /events
   def index
-    @events = Event.all
+    @events = Event.includes(:venue).all
   end
 
   # GET /events/1
@@ -53,6 +53,6 @@ class EventsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def event_params
-      params.expect(event: [ :mapbox_id, :show_time, :flier_image_url, :ticket_link_url, :user_id, :name, :description ])
+      params.expect(event: [ :mapbox_id, :show_time, :flier_image_url, :ticket_link_url, :user_id, :name, :description, :venue_id ])
     end
 end
