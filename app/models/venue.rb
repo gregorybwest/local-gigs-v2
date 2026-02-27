@@ -9,11 +9,23 @@ class Venue < ApplicationRecord
   validates :mapbox_id, presence: true, uniqueness: true
 
   def latitude
-    @latitude_buffer || coordinates&.y
+    return @latitude_buffer if @latitude_buffer
+
+    coord = coordinates
+    return coord.y if coord.respond_to?(:y)
+    return nil unless persisted?
+
+    self.class.where(id: id).pick(Arel.sql("ST_Y(coordinates::geometry)"))
   end
 
   def longitude
-    @longitude_buffer || coordinates&.x
+    return @longitude_buffer if @longitude_buffer
+
+    coord = coordinates
+    return coord.x if coord.respond_to?(:x)
+    return nil unless persisted?
+
+    self.class.where(id: id).pick(Arel.sql("ST_X(coordinates::geometry)"))
   end
 
   def latitude=(value)
