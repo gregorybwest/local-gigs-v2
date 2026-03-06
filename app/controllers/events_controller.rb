@@ -1,4 +1,5 @@
 class EventsController < ApplicationController
+  before_action :require_login, except: [ :index, :show ]
   before_action :set_event, only: %i[ show edit update destroy ]
 
   # GET /events
@@ -21,7 +22,7 @@ class EventsController < ApplicationController
 
   # POST /events
   def create
-    @event = Event.new(event_params)
+    @event = current_user.events.build(event_params)
 
     if @event.save
       redirect_to @event, notice: "Event was successfully created."

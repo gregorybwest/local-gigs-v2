@@ -14,7 +14,11 @@
     <div data-mobile-menu-target="menu" class="hidden absolute top-[60px] right-0 bg-white shadow-lg rounded-lg py-4 flex-col items-end gap-2 px-5 text-sm md:hidden opacity-0 scale-95 transition-all duration-200 ease-out origin-top-right">
         <a href="/" class="block py-2 hover:text-blue-600 transition-colors">Home</a>
         <a href="/events" class="block py-2 hover:text-blue-600 transition-colors">Events</a>
-        <a href="#" class="block py-2 font-bold hover:text-blue-600 transition-colors">Login</a>
+        <% if logged_in? %>
+          <%= link_to "Logout", logout_path, data: { turbo_method: :delete }, class: "block py-2 font-bold hover:text-blue-600 transition-colors" %>
+        <% else %>
+          <%= link_to "Login", login_path, class: "block py-2 font-bold hover:text-blue-600 transition-colors" %>
+        <% end %>
     </div>
 
     <div class="hidden sm:flex items-center gap-8">
@@ -29,8 +33,10 @@
             </svg>
         </div>
 
-        <button class="cursor-pointer px-8 py-2 bg-indigo-500 hover:bg-indigo-600 transition text-white rounded-full">
-            Login
-        </button>
+        <% if logged_in? %>
+          <%= link_to "Logout", logout_path, data: { turbo_method: :delete }, class: "cursor-pointer px-8 py-2 bg-indigo-500 hover:bg-indigo-600 transition text-white rounded-full" %>
+        <% else %>
+          <%= link_to "Login", login_path, class: "cursor-pointer px-8 py-2 bg-indigo-500 hover:bg-indigo-600 transition text-white rounded-full" %>
+        <% end %>
     </div>
 </nav>
