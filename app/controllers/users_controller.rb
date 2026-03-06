@@ -10,24 +10,8 @@ class UsersController < ApplicationController
   def show
   end
 
-  # GET /users/new
-  def new
-    @user = User.new
-  end
-
   # GET /users/1/edit
   def edit
-  end
-
-  # POST /users
-  def create
-    @user = User.new(user_params)
-
-    if @user.save
-      redirect_to @user, notice: "User was successfully created."
-    else
-      render :new, status: :unprocessable_content
-    end
   end
 
   # PATCH/PUT /users/1
@@ -53,6 +37,6 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.expect(user: [ :email, :password, :user_name, :image_url, :is_artist, :spotify_link, :preferred_location, :bio ])
+      params.expect(user: [ :email, :image_url, :is_artist, :spotify_link, :preferred_location, :bio ])
     end
 end
