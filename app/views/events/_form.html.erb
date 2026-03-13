@@ -39,6 +39,11 @@
   </div>
 
   <div class="my-5">
+    <%= form.label :name, "Event Name" %>
+    <%= form.text_field :name, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": event.errors[:name].none?, "border-red-400 focus:outline-red-600": event.errors[:name].any?}] %>
+  </div>
+
+  <div class="my-5">
     <%= form.label :show_time %>
     <%= form.datetime_field :show_time, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": event.errors[:show_time].none?, "border-red-400 focus:outline-red-600": event.errors[:show_time].any?}] %>
   </div>
@@ -51,11 +56,6 @@
   <div class="my-5">
     <%= form.label :ticket_link_url %>
     <%= form.text_field :ticket_link_url, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": event.errors[:ticket_link_url].none?, "border-red-400 focus:outline-red-600": event.errors[:ticket_link_url].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :user_id %>
-    <%= form.number_field :user_id, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": event.errors[:user_id].none?, "border-red-400 focus:outline-red-600": event.errors[:user_id].any?}] %>
   </div>
 
   <div class="inline">

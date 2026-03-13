@@ -4,6 +4,7 @@ class Event < ApplicationRecord
 
   validates :show_time, presence: true
   validates :user_id, presence: true
+  validates :name, presence: true
 
   scope :upcoming, -> { where("show_time > ?", Time.current).order(show_time: :asc) }
 

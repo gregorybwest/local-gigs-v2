@@ -94,7 +94,7 @@ class UserTest < ActiveSupport::TestCase
 
   test "destroying a user destroys their events (dependent: :destroy)" do
     user = User.create!(valid_user_attributes)
-    event = Event.create!(user: user, show_time: 1.day.from_now)
+    event = Event.create!(user: user, show_time: 1.day.from_now, name: "Test Event")
     event_id = event.id
 
     user.destroy!
