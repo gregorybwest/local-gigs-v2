@@ -160,8 +160,7 @@ GEM
     mini_magick (5.3.1)
       logger
     mini_mime (1.1.5)
-    minitest (6.0.1)
-      prism (~> 1.5)
+    minitest (5.27.0)
     msgpack (1.8.0)
     net-imap (0.5.12)
       date
@@ -372,6 +371,7 @@ PLATFORMS
   arm-linux-gnu
   arm-linux-musl
   arm64-darwin-23
+  arm64-darwin-24
   x86_64-darwin-23
   x86_64-linux
   x86_64-linux-gnu
@@ -387,6 +387,7 @@ DEPENDENCIES
   image_processing (~> 1.2)
   importmap-rails
   kamal
+  minitest (~> 5.25)
   pg (~> 1.1)
   propshaft
   puma (>= 5.0)
