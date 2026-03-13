@@ -7,7 +7,7 @@ class EventTest < ActiveSupport::TestCase
   end
 
   def valid_event_attributes
-    { user: @user, show_time: 1.day.from_now }
+    { user: @user, show_time: 1.day.from_now, name: "Test Event" }
   end
 
   # --- Validations ---

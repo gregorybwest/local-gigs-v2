@@ -84,7 +84,7 @@ class VenueTest < ActiveSupport::TestCase
   test "nullifies events when destroyed" do
     venue = Venue.create!(valid_venue_attributes)
     user = User.create!(email: "test@example.com", password: "password", preferred_location: "LA")
-    event = Event.create!(venue: venue, user: user, show_time: 1.day.from_now)
+    event = Event.create!(venue: venue, user: user, show_time: 1.day.from_now, name: "Test Event")
 
     venue.destroy!
     event.reload
