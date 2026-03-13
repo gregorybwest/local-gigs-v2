@@ -34,3 +34,6 @@
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+# Ignore Windsurf rules
+.windsurf/rules/
