@@ -6,6 +6,11 @@ class VenuesController < ApplicationController
     render json: @venues.map { |v| venue_json(v, source: "local") }
   end
 
+  def show
+    @venue = Venue.find(params[:id])
+    @events = @venue.events.order(show_time: :asc)
+  end
+
   def search
     query = params[:q]
     return render json: [] if query.blank?
