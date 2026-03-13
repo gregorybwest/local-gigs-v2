@@ -65,7 +65,7 @@
       mapContainer._mapboxMap.remove();
     }
 
-    mapboxgl.accessToken = '<%= Rails.application.credentials.mapbox[:access_token] %>';
+    mapboxgl.accessToken = '<%= Rails.application.credentials.mapbox&.[](:access_token) %>';
 
     const eventsDataEl = document.getElementById('events-data');
     const events = eventsDataEl ? JSON.parse(eventsDataEl.dataset.events || '[]') : [];

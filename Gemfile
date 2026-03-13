@@ -47,6 +47,12 @@ gem "image_processing", "~> 1.2"
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
 # gem "rack-cors"
 
+group :test do
+  # Pin to minitest 5.x — Rails 8.1.1's minitest plugin uses OptionParser patterns
+  # (opts.on(/^[^-]/) and bare opts.on blocks) that stopped working in Ruby 3.4
+  gem "minitest", "~> 5.25"
+end
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
