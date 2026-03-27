@@ -1,6 +1,6 @@
 <%= form_with(model: event, class: "contents") do |form| %>
   <% if event.errors.any? %>
-    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
+    <div id="error_explanation" class="bg-red-50 dark:bg-red-900 text-red-700 dark:text-red-300 px-3 py-2 font-medium rounded-md mt-3">
       <h2><%= pluralize(event.errors.count, "error") %> prohibited this event from being saved:</h2>
 
       <ul class="list-disc ml-6">
@@ -12,25 +12,25 @@
   <% end %>
 
   <div class="my-5" data-controller="venue-search" data-venue-search-url-value="<%= search_venues_path %>">
-    <%= form.label :venue_id, "Venue" %>
+    <%= form.label :venue_id, "Venue", class: "text-gray-900 dark:text-gray-200" %>
     <%= form.hidden_field :venue_id, data: { venue_search_target: "venueId" } %>
     <div class="relative">
       <input type="text"
         placeholder="Search for a venue..."
         data-venue-search-target="input"
         data-action="input->venue-search#search"
-        class="block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-2 w-full"
+        class="block shadow-sm rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 placeholder-gray-400 focus:outline-blue-500 focus:border-blue-500 px-3 py-2 mt-2 w-full"
         value="<%= event.venue&.name %>"
         autocomplete="off">
       <div data-venue-search-target="results"
-        class="hidden absolute z-50 w-full bg-white border border-gray-200 rounded-md shadow-lg mt-1 max-h-60 overflow-y-auto">
+        class="hidden absolute z-50 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg mt-1 max-h-60 overflow-y-auto">
       </div>
     </div>
     <div data-venue-search-target="selectedVenue">
       <% if event.venue.present? %>
-        <div class="flex items-center justify-between bg-blue-50 rounded-md px-3 py-2 mt-2">
-          <span class="text-sm font-medium text-blue-800"><%= event.venue.name %></span>
-          <button type="button" data-action="click->venue-search#clear" class="text-blue-600 hover:text-blue-800 text-sm cursor-pointer">
+        <div class="flex items-center justify-between bg-blue-50 dark:bg-blue-900 rounded-md px-3 py-2 mt-2">
+          <span class="text-sm font-medium text-blue-800 dark:text-blue-200"><%= event.venue.name %></span>
+          <button type="button" data-action="click->venue-search#clear" class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm cursor-pointer">
             Change
           </button>
         </div>
@@ -39,23 +39,23 @@
   </div>
 
   <div class="my-5">
-    <%= form.label :name, "Event Name" %>
-    <%= form.text_field :name, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": event.errors[:name].none?, "border-red-400 focus:outline-red-600": event.errors[:name].any?}] %>
+    <%= form.label :name, "Event Name", class: "text-gray-900 dark:text-gray-200" %>
+    <%= form.text_field :name, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 placeholder-gray-400", {"border-gray-300 dark:border-gray-600 focus:outline-blue-500 focus:border-blue-500": event.errors[:name].none?, "border-red-400 focus:outline-red-600": event.errors[:name].any?}] %>
   </div>
 
   <div class="my-5">
-    <%= form.label :show_time %>
-    <%= form.datetime_field :show_time, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": event.errors[:show_time].none?, "border-red-400 focus:outline-red-600": event.errors[:show_time].any?}] %>
+    <%= form.label :show_time, class: "text-gray-900 dark:text-gray-200" %>
+    <%= form.datetime_field :show_time, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200", {"border-gray-300 dark:border-gray-600 focus:outline-blue-500 focus:border-blue-500": event.errors[:show_time].none?, "border-red-400 focus:outline-red-600": event.errors[:show_time].any?}] %>
   </div>
 
   <div class="my-5">
-    <%= form.label :flier_image_url %>
-    <%= form.text_field :flier_image_url, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": event.errors[:flier_image_url].none?, "border-red-400 focus:outline-red-600": event.errors[:flier_image_url].any?}] %>
+    <%= form.label :flier_image_url, class: "text-gray-900 dark:text-gray-200" %>
+    <%= form.text_field :flier_image_url, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 placeholder-gray-400", {"border-gray-300 dark:border-gray-600 focus:outline-blue-500 focus:border-blue-500": event.errors[:flier_image_url].none?, "border-red-400 focus:outline-red-600": event.errors[:flier_image_url].any?}] %>
   </div>
 
   <div class="my-5">
-    <%= form.label :ticket_link_url %>
-    <%= form.text_field :ticket_link_url, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": event.errors[:ticket_link_url].none?, "border-red-400 focus:outline-red-600": event.errors[:ticket_link_url].any?}] %>
+    <%= form.label :ticket_link_url, class: "text-gray-900 dark:text-gray-200" %>
+    <%= form.text_field :ticket_link_url, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 placeholder-gray-400", {"border-gray-300 dark:border-gray-600 focus:outline-blue-500 focus:border-blue-500": event.errors[:ticket_link_url].none?, "border-red-400 focus:outline-red-600": event.errors[:ticket_link_url].any?}] %>
   </div>
 
   <div class="inline">

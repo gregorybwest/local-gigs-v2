@@ -23,9 +23,9 @@
     <%= yield :head %>
   </head>
 
-  <body>
+  <body class="bg-white dark:bg-gray-900 transition-colors">
     <%= render "layouts/navigation" %>
-    <main class="container mx-auto mt-28 px-5">
+    <main class="container mx-auto mt-28 px-5 bg-white dark:bg-gray-900 transition-colors">
       <%= yield %>
     </main>
   </body>
