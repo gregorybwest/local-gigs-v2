@@ -7,11 +7,11 @@
 
 <div class="w-full">
   <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+    <p class="py-2 px-3 bg-green-900 mb-5 text-green-300 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
   <% end %>
 
   <div class="flex justify-between items-center mb-6">
-    <h1 class="font-bold text-4xl">Events</h1>
+    <h1 class="font-bold text-4xl text-white">Events</h1>
     <%= link_to "New event", new_event_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium" %>
   </div>
 
@@ -24,7 +24,7 @@
         <%= render event %>
       <% end %>
     <% else %>
-      <p class="text-center my-10">No events found.</p>
+      <p class="text-center my-10 text-gray-400">No events found.</p>
     <% end %>
   </div>
 </div>
