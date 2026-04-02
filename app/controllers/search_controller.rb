@@ -40,7 +40,7 @@ class SearchController < ApplicationController
     if has_location
       distance_sql = Arel.sql(
         ActiveRecord::Base.sanitize_sql_array(
-          ["venues.*, ST_Distance(coordinates, ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography) AS distance", lng, lat]
+          [ "venues.*, ST_Distance(coordinates, ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography) AS distance", lng, lat ]
         )
       )
       scope.select(distance_sql).order(Arel.sql("distance ASC"))
@@ -57,7 +57,7 @@ class SearchController < ApplicationController
     if has_location
       distance_sql = Arel.sql(
         ActiveRecord::Base.sanitize_sql_array(
-          ["events.*, ST_Distance(venues.coordinates, ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography) AS distance", lng, lat]
+          [ "events.*, ST_Distance(venues.coordinates, ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography) AS distance", lng, lat ]
         )
       )
       scope
