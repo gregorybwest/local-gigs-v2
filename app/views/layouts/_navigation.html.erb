@@ -1,4 +1,4 @@
-<nav class="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 relative transition-all" data-controller="mobile-menu">
+<nav class="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 relative z-50 transition-all" data-controller="mobile-menu">
     <a href="/" class="text-2xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
   Local Gigs
 </a>
@@ -11,7 +11,7 @@
         </svg>
     </button>
 
-    <div data-mobile-menu-target="menu" class="hidden absolute top-[60px] right-0 bg-white dark:bg-gray-800 shadow-lg rounded-lg py-4 flex-col items-end gap-2 px-5 text-sm md:hidden opacity-0 scale-95 transition-all duration-200 ease-out origin-top-right border border-gray-200 dark:border-gray-700">
+    <div data-mobile-menu-target="menu" class="hidden absolute top-[60px] right-0 z-50 bg-white dark:bg-gray-800 shadow-lg rounded-lg py-4 flex-col items-end gap-2 px-5 text-sm md:hidden opacity-0 scale-95 transition-all duration-200 ease-out origin-top-right border border-gray-200 dark:border-gray-700">
         <a href="/" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Home</a>
         <a href="/events" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Events</a>
         <%= link_to "New Event", new_event_path, class: "px-4 py-2 rounded-full text-white font-medium transition-all hover:opacity-90", style: "background-color: #006D77;" %>
