@@ -1,1 +1,115 @@
 /* Application styles */
+
+/* Venue search result items */
+.venue-result {
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  border-bottom: 1px solid #f3f4f6;
+  background: transparent;
+  transition: background-color 0.15s ease;
+}
+.venue-result:last-child { border-bottom: none; }
+.venue-result:hover {
+  background-color: #f3f4f6;
+}
+.venue-result-name {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #111827;
+}
+.venue-result-address {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-top: 0.1rem;
+}
+@media (prefers-color-scheme: dark) {
+  .venue-result {
+    border-bottom-color: #374151;
+  }
+  .venue-result:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+  }
+  .venue-result-name {
+    color: #f3f4f6;
+  }
+  .venue-result-address {
+    color: #9ca3af;
+  }
+}
+
+/* Mapbox popup card styles — nested under .mapboxgl-popup for higher specificity than Mapbox's own CSS */
+.mapboxgl-popup .mapboxgl-popup-content {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15), 0 4px 10px -3px rgba(0,0,0,0.1) !important;
+  padding: 1rem !important;
+  border: 1px solid #e5e7eb !important;
+  background: #ffffff !important;
+  min-width: 200px !important;
+}
+.mapboxgl-popup .mapboxgl-popup-close-button {
+  padding: 4px 10px !important;
+  font-size: 1.1rem !important;
+  line-height: 1 !important;
+  color: #9ca3af !important;
+  border-radius: 0 0.75rem 0 0 !important;
+}
+.mapboxgl-popup .mapboxgl-popup-close-button:hover {
+  background: #f3f4f6 !important;
+  color: #374151 !important;
+}
+.popup-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #111827;
+  margin-bottom: 0.4rem;
+  padding-right: 1rem;
+}
+.popup-venue {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+.popup-venue a {
+  color: #4f46e5;
+  text-decoration: none;
+  outline: none;
+}
+.popup-venue a:hover { text-decoration: underline; }
+.popup-time {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-bottom: 0.6rem;
+}
+.popup-link {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #4f46e5;
+  text-decoration: none;
+}
+.popup-link:hover { text-decoration: underline; }
+@media (prefers-color-scheme: dark) {
+  .mapboxgl-popup .mapboxgl-popup-content {
+    background: #1f2937 !important;
+    border-color: #374151 !important;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.4), 0 4px 10px -3px rgba(0,0,0,0.3) !important;
+  }
+  .mapboxgl-popup .mapboxgl-popup-tip {
+    border-top-color: #1f2937 !important;
+  }
+  .mapboxgl-popup .mapboxgl-popup-close-button {
+    color: #6b7280 !important;
+  }
+  .mapboxgl-popup .mapboxgl-popup-close-button:hover {
+    background: #374151 !important;
+    color: #d1d5db !important;
+  }
+  .popup-title { color: #f9fafb; }
+  .popup-venue { color: #9ca3af; }
+  .popup-venue a { color: #818cf8; }
+  .popup-time { color: #6b7280; }
+  .popup-link { color: #818cf8; }
+}

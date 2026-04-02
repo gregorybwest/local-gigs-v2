@@ -1,40 +1,33 @@
-<div data-controller="mobile-menu">
-<nav class="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 relative transition-all">
+<nav class="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 relative z-50 transition-all" data-controller="mobile-menu">
     <a href="/" class="text-2xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
   Local Gigs
 </a>
 
-    <div class="flex items-center gap-8 sm:hidden">
-        <button aria-label="Search" data-action="click->mobile-menu#toggleSearch" class="text-gray-600 dark:text-gray-300">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="11" cy="11" r="7"/>
-                <line x1="16.5" y1="16.5" x2="22" y2="22"/>
-            </svg>
-        </button>
-        <button aria-label="Menu" data-action="click->mobile-menu#toggle" class="text-gray-600 dark:text-gray-300">
-            <svg width="21" height="15" viewBox="0 0 21 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="21" height="1.5" rx=".75" fill="currentColor"/>
-                <rect x="8" y="6" width="13" height="1.5" rx=".75" fill="currentColor"/>
-                <rect x="6" y="13" width="15" height="1.5" rx=".75" fill="currentColor"/>
-            </svg>
-        </button>
-    </div>
+    <% if notice.present? %>
+      <p id="notice" class="absolute left-[35%] -translate-x-1/2 py-1.5 px-4 bg-green-50 dark:bg-green-900 text-green-700 dark:text-green-300 text-sm font-medium rounded-full border border-green-200 dark:border-green-700 pointer-events-none"><%= notice %></p>
+    <% end %>
 
-    <div data-mobile-menu-target="menu" class="hidden absolute top-[60px] right-0 bg-white dark:bg-gray-800 shadow-lg rounded-lg py-4 flex-col items-end gap-2 px-5 text-sm md:hidden opacity-0 scale-95 transition-all duration-200 ease-out origin-top-right border border-gray-200 dark:border-gray-700">
-        <a href="/" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Home</a>
-        <a href="/events" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Events</a>
+    <button aria-label="Menu" data-action="click->mobile-menu#toggle" class="sm:hidden">
+        <svg width="21" height="15" viewBox="0 0 21 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="21" height="1.5" rx=".75" fill="#426287"/>
+            <rect x="8" y="6" width="13" height="1.5" rx=".75" fill="#426287"/>
+            <rect x="6" y="13" width="15" height="1.5" rx=".75" fill="#426287"/>
+        </svg>
+    </button>
+
+    <div data-mobile-menu-target="menu" class="hidden absolute top-[60px] right-0 z-50 bg-white dark:bg-gray-800 shadow-lg rounded-lg py-4 flex-col items-start gap-2 px-5 text-sm md:hidden opacity-0 scale-95 transition-all duration-200 ease-out origin-top-right border border-gray-200 dark:border-gray-700">
         <%= link_to "New Event", new_event_path, class: "px-4 py-2 rounded-full text-white font-medium transition-all hover:opacity-90", style: "background-color: #006D77;" %>
+        <a href="/events" class="block py-2 pl-[16px] text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Events</a>
         <% if logged_in? %>
-          <%= link_to "Logout", logout_path, data: { turbo_method: :delete }, class: "block py-2 font-bold text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" %>
+          <%= link_to "Logout", logout_path, data: { turbo_method: :delete }, class: "block py-2 pl-[16px] font-bold text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" %>
         <% else %>
-          <%= link_to "Login", login_path, class: "block py-2 font-bold text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" %>
+          <%= link_to "Login", login_path, class: "block py-2 pl-[16px] font-bold text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" %>
         <% end %>
     </div>
 
     <div class="hidden sm:flex items-center gap-8 text-gray-700 dark:text-gray-300">
-        <a href="/" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Home</a>
-        <a href="/events" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Events</a>
         <%= link_to "New Event", new_event_path, class: "px-6 py-2 rounded-full text-white font-medium transition-all hover:opacity-90 shadow-md", style: "background-color: #006D77;" %>
+        <a href="/events" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Events</a>
 
         <div class="hidden lg:flex" data-controller="global-search">
             <div class="relative w-64">
