@@ -1,1 +1,75 @@
 /* Application styles */
+
+/* Mapbox popup card styles */
+.mapboxgl-popup-content {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15), 0 4px 10px -3px rgba(0,0,0,0.1);
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  min-width: 200px;
+}
+.mapboxgl-popup-close-button {
+  padding: 4px 10px;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: #9ca3af;
+  border-radius: 0 0.75rem 0 0;
+}
+.mapboxgl-popup-close-button:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+.popup-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #111827;
+  margin-bottom: 0.4rem;
+  padding-right: 1rem;
+}
+.popup-venue {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+.popup-venue a {
+  color: #4f46e5;
+  text-decoration: none;
+}
+.popup-venue a:hover { text-decoration: underline; }
+.popup-time {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-bottom: 0.6rem;
+}
+.popup-link {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #4f46e5;
+  text-decoration: none;
+}
+.popup-link:hover { text-decoration: underline; }
+@media (prefers-color-scheme: dark) {
+  .mapboxgl-popup-content {
+    background: #1f2937;
+    border-color: #374151;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.4), 0 4px 10px -3px rgba(0,0,0,0.3);
+  }
+  .mapboxgl-popup-tip {
+    border-top-color: #1f2937 !important;
+  }
+  .mapboxgl-popup-close-button {
+    color: #6b7280;
+  }
+  .mapboxgl-popup-close-button:hover {
+    background: #374151;
+    color: #d1d5db;
+  }
+  .popup-title { color: #f9fafb; }
+  .popup-venue { color: #9ca3af; }
+  .popup-venue a { color: #818cf8; }
+  .popup-time { color: #6b7280; }
+  .popup-link { color: #818cf8; }
+}

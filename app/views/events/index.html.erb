@@ -89,13 +89,11 @@
           const lngLat = [event.longitude, event.latitude];
 
           const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(`
-            <div class="p-1">
-              <strong>${event.name || event.venue_name}</strong>
-              <p class="text-sm text-gray-600">
-                <a href="/venues/${event.venue_id}" class="text-blue-600 hover:underline">${event.venue_name}</a>
-              </p>
-              <p class="text-xs text-gray-500">${event.show_time}</p>
-              <a href="${event.url}" class="text-xs text-blue-600 hover:underline">View Event</a>
+            <div>
+              <p class="popup-title">${event.name || event.venue_name}</p>
+              <p class="popup-venue"><a href="/venues/${event.venue_id}">${event.venue_name}</a></p>
+              <p class="popup-time">${event.show_time}</p>
+              <a href="${event.url}" class="popup-link">View Event &rarr;</a>
             </div>
           `);
 
