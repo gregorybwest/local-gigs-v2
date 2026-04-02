@@ -1,0 +1,95 @@
+<% content_for :title, "Search Results" %>
+
+<div class="max-w-4xl mx-auto mt-8 mb-12">
+  <!-- Search input -->
+  <form action="<%= search_results_path %>" method="get" class="mb-8">
+    <div class="flex items-center gap-3">
+      <div class="flex-1 flex items-center gap-2 border border-gray-300 dark:border-gray-600 px-4 py-3 rounded-lg bg-white dark:bg-gray-800 shadow-sm">
+        <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <input type="text"
+               name="q"
+               value="<%= @query %>"
+               placeholder="Search events & venues..."
+               class="w-full bg-transparent outline-none text-gray-900 dark:text-gray-100 placeholder-gray-400"
+               autofocus />
+      </div>
+      <button type="submit" class="px-6 py-3 rounded-lg text-white font-medium transition-all hover:opacity-90 shadow-sm" style="background-color: #006D77;">
+        Search
+      </button>
+    </div>
+  </form>
+
+  <% if @query.present? && @query.length >= 2 %>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
+      Showing results for "<span class="font-medium text-gray-700 dark:text-gray-300"><%= @query %></span>"
+    </p>
+
+    <!-- Events Section -->
+    <section class="mb-10">
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full" style="background-color: #006D77;">
+          <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+        </span>
+        Events
+        <% if @events_pagy %>
+          <span class="text-base font-normal text-gray-500 dark:text-gray-400">(<%= @events_pagy.count %>)</span>
+        <% end %>
+      </h2>
+
+      <% if @events.any? %>
+        <div id="events" class="space-y-4">
+          <% @events.each do |event| %>
+            <%= render event %>
+          <% end %>
+        </div>
+
+        <% if @events_pagy&.pages.to_i > 1 %>
+          <nav class="mt-6 flex justify-center">
+            <%== pagy_nav(@events_pagy, page_param: :events_page) %>
+          </nav>
+        <% end %>
+      <% else %>
+        <p class="text-gray-500 dark:text-gray-400 italic py-4">No upcoming events match your search.</p>
+      <% end %>
+    </section>
+
+    <!-- Venues Section -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-indigo-500">
+          <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+        </span>
+        Venues
+        <% if @venues_pagy %>
+          <span class="text-base font-normal text-gray-500 dark:text-gray-400">(<%= @venues_pagy.count %>)</span>
+        <% end %>
+      </h2>
+
+      <% if @venues.any? %>
+        <div id="venues" class="space-y-4">
+          <% @venues.each do |venue| %>
+            <%= render venue %>
+          <% end %>
+        </div>
+
+        <% if @venues_pagy&.pages.to_i > 1 %>
+          <nav class="mt-6 flex justify-center">
+            <%== pagy_nav(@venues_pagy, page_param: :venues_page) %>
+          </nav>
+        <% end %>
+      <% else %>
+        <p class="text-gray-500 dark:text-gray-400 italic py-4">No venues match your search.</p>
+      <% end %>
+    </section>
+
+  <% elsif @query.present? %>
+    <p class="text-sm text-gray-500 dark:text-gray-400">Please enter at least 2 characters to search.</p>
+  <% end %>
+</div>
