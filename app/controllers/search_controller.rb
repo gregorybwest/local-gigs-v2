@@ -3,48 +3,62 @@ class SearchController < ApplicationController
     query = params[:q].to_s.strip
     return render json: [] if query.blank? || query.length < 2
 
-    lat = params[:lat].presence&.to_f
-    lng = params[:lng].presence&.to_f
-    has_location = lat.present? && lng.present?
+    lat, lng, has_location = extract_location
+    venues = venue_scope(query, lat, lng, has_location).limit(5).map { |v| venue_result(v, has_location) }
+    events = event_scope(query, lat, lng, has_location).limit(5).map { |e| event_result(e) }
 
-    venues = search_venues(query, lat, lng, has_location)
-    events = search_events(query, lat, lng, has_location)
+    render json: (venues + events).first(10)
+  end
 
-    results = (venues + events).first(10)
-    render json: results
+  def show
+    @query = params[:q].to_s.strip
+    lat, lng, has_location = extract_location
+
+    if @query.length >= 2
+      @events_pagy, @events = pagy(event_scope(@query, lat, lng, has_location), limit: 10, page_param: :events_page)
+      @venues_pagy, @venues = pagy(venue_scope(@query, lat, lng, has_location), limit: 10, page_param: :venues_page)
+    else
+      @events_pagy = nil
+      @events = Event.none
+      @venues_pagy = nil
+      @venues = Venue.none
+    end
   end
 
   private
 
-  def search_venues(query, lat, lng, has_location)
+  def extract_location
+    lat = params[:lat].presence&.to_f
+    lng = params[:lng].presence&.to_f
+    has_location = lat.present? && lng.present?
+    [ lat, lng, has_location ]
+  end
+
+  def venue_scope(query, lat, lng, has_location)
     scope = Venue.where('name ILIKE ?', "%#{query}%")
 
     if has_location
-      scope = scope
+      scope
         .select("venues.*, ST_Distance(coordinates, ST_SetSRID(ST_MakePoint(#{lng}, #{lat}), 4326)::geography) AS distance")
         .order(Arel.sql('distance ASC'))
     else
-      scope = scope.order(:name)
+      scope.order(:name)
     end
-
-    scope.limit(5).map { |v| venue_result(v, has_location) }
   end
 
-  def search_events(query, lat, lng, has_location)
+  def event_scope(query, lat, lng, has_location)
     scope = Event.where('events.name ILIKE ?', "%#{query}%")
                  .where('show_time > ?', Time.current)
                  .includes(:venue)
 
     if has_location
-      scope = scope
+      scope
         .joins('LEFT JOIN venues ON venues.id = events.venue_id')
         .select("events.*, ST_Distance(venues.coordinates, ST_SetSRID(ST_MakePoint(#{lng}, #{lat}), 4326)::geography) AS distance")
         .order(Arel.sql('distance ASC NULLS LAST, show_time ASC'))
     else
-      scope = scope.order(show_time: :asc)
+      scope.order(show_time: :asc)
     end
-
-    scope.limit(5).map { |e| event_result(e) }
   end
 
   def venue_result(venue, has_location)

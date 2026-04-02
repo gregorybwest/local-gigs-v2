@@ -68,7 +68,9 @@ export default class extends Controller {
       return;
     }
 
-    this.resultsTarget.innerHTML = results.map((result) => this.renderResult(result)).join("");
+    const resultHtml = results.map((result) => this.renderResult(result)).join("");
+    const showMoreHtml = this.renderShowMoreLink();
+    this.resultsTarget.innerHTML = resultHtml + showMoreHtml;
     this.showResults();
   }
 
@@ -131,6 +133,25 @@ export default class extends Controller {
           <div class="text-xs text-gray-500 dark:text-gray-400 truncate">${this.escapeHtml(result.city || "")}</div>
         </div>
         <span class="flex-shrink-0 text-xs px-1.5 py-0.5 rounded font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300">Venue</span>
+      </a>
+    `;
+  }
+
+  renderShowMoreLink() {
+    const query = encodeURIComponent(this.inputTarget.value.trim());
+    let url = `/search/results?q=${query}`;
+    if (this.latitude && this.longitude) {
+      url += `&lat=${this.latitude}&lng=${this.longitude}`;
+    }
+
+    return `
+      <a href="${url}"
+         class="flex items-center justify-center gap-1 px-4 py-2.5 text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 no-underline transition-colors"
+         data-turbo-frame="_top">
+        Show more results
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
       </a>
     `;
   }

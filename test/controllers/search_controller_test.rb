@@ -233,4 +233,93 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     assert event_result, "Should return events that have no venue"
     assert_nil event_result["venue_name"], "Venue name should be nil for venueless events"
   end
+
+  # =============================================================
+  # Search Results Page (GET /search/results)
+  # =============================================================
+
+  test "GET /search/results renders HTML page" do
+    get search_results_path, params: { q: "Fillmore" }
+    assert_response :success
+    assert_includes response.content_type, "text/html"
+  end
+
+  test "GET /search/results displays matching events" do
+    get search_results_path, params: { q: "Jazz Night" }
+    assert_response :success
+    assert_select "#events" do
+      assert_select "[id*=event]", { minimum: 1 }, "Should render event cards"
+    end
+  end
+
+  test "GET /search/results displays matching venues" do
+    get search_results_path, params: { q: "Fillmore" }
+    assert_response :success
+    assert_select "#venues" do
+      assert_select "[id*=venue]", { minimum: 1 }, "Should render venue cards"
+    end
+  end
+
+  test "GET /search/results excludes past events" do
+    get search_results_path, params: { q: "Blues" }
+    assert_response :success
+    assert_select "#events", false, "Past events should not appear in search results"
+  end
+
+  test "GET /search/results pre-fills search query" do
+    get search_results_path, params: { q: "Fillmore" }
+    assert_response :success
+    assert_select "input[name=q][value=Fillmore]"
+  end
+
+  test "GET /search/results handles blank query gracefully" do
+    get search_results_path, params: { q: "" }
+    assert_response :success
+    assert_select "#events", false, "Should not render events section for blank query"
+    assert_select "#venues", false, "Should not render venues section for blank query"
+  end
+
+  test "GET /search/results handles short query gracefully" do
+    get search_results_path, params: { q: "J" }
+    assert_response :success
+    assert_select "#events", false, "Should not render events for single char query"
+  end
+
+  test "GET /search/results paginates events" do
+    12.times do |i|
+      Event.create!(
+        name: "Paginated Test Event #{i}",
+        show_time: (i + 1).days.from_now,
+        user: @user,
+        venue: @venue1
+      )
+    end
+
+    get search_results_path, params: { q: "Paginated Test" }
+    assert_response :success
+    assert_select "#events [id*=event]", 10, "Should show 10 events per page"
+
+    get search_results_path, params: { q: "Paginated Test", events_page: 2 }
+    assert_response :success
+    assert_select "#events [id*=event]", 2, "Page 2 should show remaining 2 events"
+  end
+
+  test "GET /search/results paginates venues" do
+    12.times do |i|
+      Venue.create!(
+        name: "Paginated Venue #{i}",
+        address: "#{i} Test St",
+        city: "Test City",
+        mapbox_id: "poi.paginated#{i}"
+      )
+    end
+
+    get search_results_path, params: { q: "Paginated Venue" }
+    assert_response :success
+    assert_select "#venues [id*=venue]", 10, "Should show 10 venues per page"
+
+    get search_results_path, params: { q: "Paginated Venue", venues_page: 2 }
+    assert_response :success
+    assert_select "#venues [id*=venue]", 2, "Page 2 should show remaining 2 venues"
+  end
 end
