@@ -75,6 +75,7 @@
 .popup-venue a {
   color: #4f46e5;
   text-decoration: none;
+  outline: none;
 }
 .popup-venue a:hover { text-decoration: underline; }
 .popup-time {
