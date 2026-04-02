@@ -12,7 +12,6 @@
     </button>
 
     <div data-mobile-menu-target="menu" class="hidden absolute top-[60px] right-0 z-50 bg-white dark:bg-gray-800 shadow-lg rounded-lg py-4 flex-col items-end gap-2 px-5 text-sm md:hidden opacity-0 scale-95 transition-all duration-200 ease-out origin-top-right border border-gray-200 dark:border-gray-700">
-        <a href="/" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Home</a>
         <a href="/events" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Events</a>
         <%= link_to "New Event", new_event_path, class: "px-4 py-2 rounded-full text-white font-medium transition-all hover:opacity-90", style: "background-color: #006D77;" %>
         <% if logged_in? %>
@@ -23,7 +22,6 @@
     </div>
 
     <div class="hidden sm:flex items-center gap-8 text-gray-700 dark:text-gray-300">
-        <a href="/" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Home</a>
         <a href="/events" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Events</a>
         <%= link_to "New Event", new_event_path, class: "px-6 py-2 rounded-full text-white font-medium transition-all hover:opacity-90 shadow-md", style: "background-color: #006D77;" %>
 
