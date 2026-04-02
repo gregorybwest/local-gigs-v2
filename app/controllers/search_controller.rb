@@ -65,6 +65,7 @@ class SearchController < ApplicationController
       id: event.id,
       name: event.name,
       show_time: event.formatted_show_time,
+      show_time_iso: event.show_time.iso8601,
       venue_name: event.venue&.name,
       url: event_path(event)
     }

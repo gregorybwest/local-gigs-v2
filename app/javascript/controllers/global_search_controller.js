@@ -80,9 +80,18 @@ export default class extends Controller {
   }
 
   renderEvent(result) {
-    const venueLine = result.venue_name
-      ? `<span class="text-gray-500 dark:text-gray-400">${this.escapeHtml(result.venue_name)}</span>`
-      : "";
+    const showTime = new Date(result.show_time_iso);
+    const today = new Date();
+    const isToday =
+      showTime.getFullYear() === today.getFullYear() &&
+      showTime.getMonth() === today.getMonth() &&
+      showTime.getDate() === today.getDate();
+
+    const timeDisplay = isToday
+      ? showTime.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
+      : showTime.toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
+
+    const venuePart = result.venue_name ? ` · ${this.escapeHtml(result.venue_name)}` : "";
 
     return `
       <a href="${result.url}"
@@ -96,12 +105,10 @@ export default class extends Controller {
           </span>
         </div>
         <div class="flex-1 min-w-0">
-          <div class="font-medium text-gray-900 dark:text-gray-100 truncate">${this.escapeHtml(result.name)}</div>
-          <div class="text-xs text-gray-500 dark:text-gray-400 truncate">
-            ${this.escapeHtml(result.show_time)}${venueLine ? " · " + venueLine : ""}
-          </div>
+          <div class="font-medium text-gray-900 dark:text-white truncate">${this.escapeHtml(result.name)}</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 truncate">${timeDisplay}${venuePart}</div>
         </div>
-        <span class="flex-shrink-0 text-xs px-1.5 py-0.5 rounded font-medium" style="background-color: #E0F5F5; color: #006D77;">Event</span>
+        <span class="flex-shrink-0 text-xs px-1.5 py-0.5 rounded font-medium bg-teal-50 text-teal-700 dark:bg-teal-900/40 dark:text-teal-300">Event</span>
       </a>
     `;
   }
@@ -120,10 +127,10 @@ export default class extends Controller {
           </span>
         </div>
         <div class="flex-1 min-w-0">
-          <div class="font-medium text-gray-900 dark:text-gray-100 truncate">${this.escapeHtml(result.name)}</div>
-          <div class="text-xs text-gray-500 dark:text-gray-400 truncate">${this.escapeHtml(result.address || result.city || "")}</div>
+          <div class="font-medium text-gray-900 dark:text-white truncate">${this.escapeHtml(result.name)}</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 truncate">${this.escapeHtml(result.city || "")}</div>
         </div>
-        <span class="flex-shrink-0 text-xs px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-700 font-medium">Venue</span>
+        <span class="flex-shrink-0 text-xs px-1.5 py-0.5 rounded font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300">Venue</span>
       </a>
     `;
   }
