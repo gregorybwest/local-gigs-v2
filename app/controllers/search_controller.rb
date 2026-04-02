@@ -38,9 +38,12 @@ class SearchController < ApplicationController
     scope = Venue.where("name ILIKE ?", "%#{query}%")
 
     if has_location
-      scope
-        .select("venues.*, ST_Distance(coordinates, ST_SetSRID(ST_MakePoint(#{lng}, #{lat}), 4326)::geography) AS distance")
-        .order(Arel.sql("distance ASC"))
+      distance_sql = Arel.sql(
+        ActiveRecord::Base.sanitize_sql_array(
+          ["venues.*, ST_Distance(coordinates, ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography) AS distance", lng, lat]
+        )
+      )
+      scope.select(distance_sql).order(Arel.sql("distance ASC"))
     else
       scope.order(:name)
     end
@@ -52,9 +55,14 @@ class SearchController < ApplicationController
                  .includes(:venue)
 
     if has_location
+      distance_sql = Arel.sql(
+        ActiveRecord::Base.sanitize_sql_array(
+          ["events.*, ST_Distance(venues.coordinates, ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography) AS distance", lng, lat]
+        )
+      )
       scope
         .joins("LEFT JOIN venues ON venues.id = events.venue_id")
-        .select("events.*, ST_Distance(venues.coordinates, ST_SetSRID(ST_MakePoint(#{lng}, #{lat}), 4326)::geography) AS distance")
+        .select(distance_sql)
         .order(Arel.sql("distance ASC NULLS LAST, show_time ASC"))
     else
       scope.order(show_time: :asc)
