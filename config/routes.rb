@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "search", to: "search#index"
   resources :events
   resources :users, except: [ :new, :create ]
   resources :venues, only: [ :index, :show, :create ] do
