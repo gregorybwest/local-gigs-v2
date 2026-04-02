@@ -35,27 +35,27 @@ class SearchController < ApplicationController
   end
 
   def venue_scope(query, lat, lng, has_location)
-    scope = Venue.where('name ILIKE ?', "%#{query}%")
+    scope = Venue.where("name ILIKE ?", "%#{query}%")
 
     if has_location
       scope
         .select("venues.*, ST_Distance(coordinates, ST_SetSRID(ST_MakePoint(#{lng}, #{lat}), 4326)::geography) AS distance")
-        .order(Arel.sql('distance ASC'))
+        .order(Arel.sql("distance ASC"))
     else
       scope.order(:name)
     end
   end
 
   def event_scope(query, lat, lng, has_location)
-    scope = Event.where('events.name ILIKE ?', "%#{query}%")
-                 .where('show_time > ?', Time.current)
+    scope = Event.where("events.name ILIKE ?", "%#{query}%")
+                 .where("show_time > ?", Time.current)
                  .includes(:venue)
 
     if has_location
       scope
-        .joins('LEFT JOIN venues ON venues.id = events.venue_id')
+        .joins("LEFT JOIN venues ON venues.id = events.venue_id")
         .select("events.*, ST_Distance(venues.coordinates, ST_SetSRID(ST_MakePoint(#{lng}, #{lat}), 4326)::geography) AS distance")
-        .order(Arel.sql('distance ASC NULLS LAST, show_time ASC'))
+        .order(Arel.sql("distance ASC NULLS LAST, show_time ASC"))
     else
       scope.order(show_time: :asc)
     end
@@ -63,7 +63,7 @@ class SearchController < ApplicationController
 
   def venue_result(venue, has_location)
     {
-      type: 'venue',
+      type: "venue",
       id: venue.id,
       name: venue.name,
       address: venue.address,
@@ -75,7 +75,7 @@ class SearchController < ApplicationController
 
   def event_result(event)
     {
-      type: 'event',
+      type: "event",
       id: event.id,
       name: event.name,
       show_time: event.formatted_show_time,
