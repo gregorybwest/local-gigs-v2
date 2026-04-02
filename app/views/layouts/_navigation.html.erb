@@ -3,6 +3,10 @@
   Local Gigs
 </a>
 
+    <% if notice.present? %>
+      <p id="notice" class="absolute left-[35%] -translate-x-1/2 py-1.5 px-4 bg-green-50 dark:bg-green-900 text-green-700 dark:text-green-300 text-sm font-medium rounded-full border border-green-200 dark:border-green-700 pointer-events-none"><%= notice %></p>
+    <% end %>
+
     <button aria-label="Menu" data-action="click->mobile-menu#toggle" class="sm:hidden">
         <svg width="21" height="15" viewBox="0 0 21 15" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="21" height="1.5" rx=".75" fill="#426287"/>
