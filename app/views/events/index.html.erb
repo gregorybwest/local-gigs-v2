@@ -11,7 +11,7 @@
   <% end %>
 
   <!-- Mapbox Map -->
-  <div id="map" class="w-full shadow-lg mb-8" style="height: 520px;"></div>
+  <div id="map" class="w-full shadow-lg mb-8 rounded-xl overflow-hidden" style="height: 450px;"></div>
 
   <div id="events" class="space-y-4">
     <% if @events.any? %>
@@ -60,27 +60,39 @@
     const eventsDataEl = document.getElementById('events-data');
     const events = eventsDataEl ? JSON.parse(eventsDataEl.dataset.events || '[]') : [];
 
-    const defaultCenter = [30, 15];
-    const defaultZoom = 1;
+    const fallbackCenter = [-98.5795, 39.8283];
+    const defaultZoom = 9;
 
-    const map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/standard',
-      projection: 'globe',
-      zoom: defaultZoom,
-      center: defaultCenter
-    });
+    function createMap(center) {
+      const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/standard',
+        zoom: defaultZoom,
+        center: center
+      });
 
-    mapContainer._mapboxMap = map;
+      mapContainer._mapboxMap = map;
+      map.addControl(new mapboxgl.NavigationControl());
+      map.on('load', () => addEventMarkers(map));
+      return map;
+    }
 
-    map.addControl(new mapboxgl.NavigationControl());
-
-    map.on('style.load', () => {
-      map.setFog({});
-    });
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          createMap([position.coords.longitude, position.coords.latitude]);
+        },
+        () => {
+          createMap(fallbackCenter);
+        },
+        { timeout: 5000 }
+      );
+    } else {
+      createMap(fallbackCenter);
+    }
 
     // Add event markers to the map
-    function addEventMarkers() {
+    function addEventMarkers(map) {
       const bounds = new mapboxgl.LngLatBounds();
       let hasMarkers = false;
 
@@ -97,7 +109,7 @@
             </div>
           `);
 
-          new mapboxgl.Marker({ color: '#EF4444' })
+          new mapboxgl.Marker({ color: '#006D77' })
             .setLngLat(lngLat)
             .setPopup(popup)
             .addTo(map);
@@ -113,28 +125,7 @@
         return;
       }
 
-      // Otherwise, try user's location
-      if ('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const userLocation = [position.coords.longitude, position.coords.latitude];
-            map.flyTo({
-              center: userLocation,
-              zoom: 11,
-              essential: true,
-              duration: 2000
-            });
-          },
-          () => { console.log('Using default location'); },
-          { enableHighAccuracy: false, timeout: 5000, maximumAge: 0 }
-        );
-      }
     }
-
-    map.on('load', () => {
-      console.log('Map loaded successfully');
-      addEventMarkers();
-    });
   }
 
   // Initialize map on both turbo:load (full page load) and turbo:render (cache restoration)
