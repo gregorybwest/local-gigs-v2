@@ -55,7 +55,7 @@ export default class extends Controller {
       .map(
         (result) => `
       <button type="button"
-        class="w-full text-left px-4 py-3 hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-0"
+        class="venue-result"
         data-action="click->venue-search#select"
         data-venue-id="${result.id || ""}"
         data-mapbox-id="${result.mapbox_id}"
@@ -65,8 +65,8 @@ export default class extends Controller {
         data-latitude="${result.latitude || ""}"
         data-longitude="${result.longitude || ""}"
         data-source="${result.source}">
-        <div class="font-medium text-gray-900">${this.escapeHtml(result.name)}</div>
-        <div class="text-sm text-gray-500">${this.escapeHtml(result.address)}</div>
+        <div class="venue-result-name">${this.escapeHtml(result.name)}</div>
+        <div class="venue-result-address">${this.escapeHtml(result.address)}</div>
         <span class="text-xs px-1.5 py-0.5 rounded ${result.source === "local" ? "bg-green-100 text-green-700" : "bg-blue-100 text-blue-700"}">
           ${result.source === "local" ? "Saved" : "Mapbox"}
         </span>
