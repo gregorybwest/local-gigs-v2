@@ -49,8 +49,15 @@
   </div>
 
   <div class="my-5">
-    <%= form.label :flier_image_url, class: "text-gray-900 dark:text-gray-200" %>
-    <%= form.text_field :flier_image_url, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 placeholder-gray-400", {"border-gray-300 dark:border-gray-600 focus:outline-blue-500 focus:border-blue-500": event.errors[:flier_image_url].none?, "border-red-400 focus:outline-red-600": event.errors[:flier_image_url].any?}] %>
+    <%= form.label :image, "Event Image", class: "text-gray-900 dark:text-gray-200" %>
+    <% if event.image_public_id.present? %>
+      <div class="mt-2 mb-3">
+        <%= image_tag event.image_url(width: 200, height: 150), class: "rounded-md", alt: event.name %>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Upload a new image to replace the current one</p>
+      </div>
+    <% end %>
+    <%= form.file_field :image, accept: "image/jpeg,image/png", class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 dark:file:bg-blue-900 dark:file:text-blue-300 file:cursor-pointer", {"border-gray-300 dark:border-gray-600": event.errors[:image].none?, "border-red-400": event.errors[:image].any?}] %>
+    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">JPEG or PNG, max 1MB</p>
   </div>
 
   <div class="my-5">

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_06_052954) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_16_034445) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "postgis"
@@ -18,7 +18,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_06_052954) do
   create_table "events", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "description"
-    t.string "flier_image_url"
+    t.string "image_public_id"
     t.string "mapbox_id"
     t.string "name"
     t.datetime "show_time"
