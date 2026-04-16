@@ -23,8 +23,9 @@ class EventsController < ApplicationController
   # POST /events
   def create
     @event = current_user.events.build(event_params)
+    @event.image = params[:event][:image] if params.dig(:event, :image).present?
 
-    if @event.save
+    if @event.valid? && upload_image(@event) && @event.save
       redirect_to @event, notice: "Event was successfully created."
     else
       render :new, status: :unprocessable_content
@@ -33,7 +34,10 @@ class EventsController < ApplicationController
 
   # PATCH/PUT /events/1
   def update
-    if @event.update(event_params)
+    @event.assign_attributes(event_params)
+    @event.image = params[:event][:image] if params.dig(:event, :image).present?
+
+    if @event.valid? && upload_image(@event) && @event.save
       redirect_to @event, notice: "Event was successfully updated.", status: :see_other
     else
       render :edit, status: :unprocessable_content
@@ -54,6 +58,18 @@ class EventsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def event_params
-      params.expect(event: [ :mapbox_id, :show_time, :flier_image_url, :ticket_link_url, :user_id, :name, :description, :venue_id ])
+      params.expect(event: [ :mapbox_id, :show_time, :ticket_link_url, :user_id, :name, :description, :venue_id ])
+    end
+
+    def upload_image(event)
+      return true unless event.image.present?
+
+      result = Cloudinary::Uploader.upload(event.image.tempfile.path, folder: "local_gigs/events")
+      event.image_public_id = result["public_id"]
+      true
+    rescue StandardError => e
+      Rails.logger.error("Cloudinary upload failed: #{e.class} - #{e.message}")
+      event.errors.add(:image, "upload failed, please try again")
+      false
     end
 end

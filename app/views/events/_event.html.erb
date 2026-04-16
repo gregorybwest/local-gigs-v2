@@ -1,39 +1,41 @@
 <div id="<%= dom_id event %>" class="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl dark:hover:shadow-blue-500/20 transition-all duration-200 p-6 mb-4 border border-gray-200 dark:border-gray-700">
-  <div class="space-y-3">
-    <div>
-      <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">
-        <%= link_to (event.name.presence || "Untitled Event"), event, class: "text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline" %>
-      </h3>
-    </div>
-    
-    <div class="flex items-center text-gray-700 dark:text-gray-300">
-      <svg class="w-5 h-5 mr-2 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-      </svg>
-      <% if event.venue %>
-        <%= link_to event.venue.name, venue_path(event.venue), class: "text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline" %>
-      <% else %>
-        <span class="text-gray-600 dark:text-gray-400"><%= event.mapbox_id %></span>
+  <div class="flex gap-4">
+    <div class="flex-1 space-y-3">
+      <div>
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">
+          <%= link_to (event.name.presence || "Untitled Event"), event, class: "text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline" %>
+        </h3>
+      </div>
+
+      <div class="flex items-center text-gray-700 dark:text-gray-300">
+        <svg class="w-5 h-5 mr-2 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+        </svg>
+        <% if event.venue %>
+          <%= link_to event.venue.name, venue_path(event.venue), class: "text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline" %>
+        <% else %>
+          <span class="text-gray-600 dark:text-gray-400"><%= event.mapbox_id %></span>
+        <% end %>
+      </div>
+
+      <div class="flex items-center text-gray-700 dark:text-gray-300">
+        <svg class="w-5 h-5 mr-2 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
+        <%= event.formatted_show_time %>
+      </div>
+
+      <% if event.ticket_link_url.present? %>
+        <div class="text-sm text-gray-600 dark:text-gray-400">
+          <span class="font-medium text-gray-700 dark:text-gray-300">Tickets:</span> <%= event.ticket_link_url %>
+        </div>
       <% end %>
     </div>
-    
-    <div class="flex items-center text-gray-700 dark:text-gray-300">
-      <svg class="w-5 h-5 mr-2 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-      </svg>
-      <%= event.formatted_show_time %>
-    </div>
-    
-    <% if event.flier_image_url.present? %>
-      <div class="text-sm text-gray-600 dark:text-gray-400">
-        <span class="font-medium text-gray-700 dark:text-gray-300">Flier:</span> <%= event.flier_image_url %>
-      </div>
-    <% end %>
-    
-    <% if event.ticket_link_url.present? %>
-      <div class="text-sm text-gray-600 dark:text-gray-400">
-        <span class="font-medium text-gray-700 dark:text-gray-300">Tickets:</span> <%= event.ticket_link_url %>
+
+    <% if event.image_public_id.present? %>
+      <div class="flex-shrink-0">
+        <%= image_tag event.image_url(width: 160, height: 120), class: "rounded-lg object-cover w-[160px] h-[120px]", alt: event.name %>
       </div>
     <% end %>
   </div>
