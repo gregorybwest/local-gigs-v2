@@ -11,18 +11,22 @@ class MapboxService
     @access_token = Rails.application.credentials.mapbox[:access_token]
   end
 
-  def search(query, limit: 5)
+  def search(query, limit: 5, proximity: nil, bbox: nil)
     return [] if query.blank?
 
-    uri = URI(BASE_URL)
-    uri.query = URI.encode_www_form(
+    params = {
       q: query,
       access_token: @access_token,
       limit: limit,
       country: "us",
       poi_category: POI_CATEGORIES,
       auto_complete: true
-    )
+    }
+    params[:proximity] = proximity if proximity.present?
+    params[:bbox] = bbox if bbox.present?
+
+    uri = URI(BASE_URL)
+    uri.query = URI.encode_www_form(params)
 
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
