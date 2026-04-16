@@ -4,7 +4,7 @@ class EventsController < ApplicationController
 
   # GET /events
   def index
-    @events = Event.includes(:venue).all
+    @events = Event.includes(:venue).where("show_time > ?", Time.current).order(show_time: :asc)
   end
 
   # GET /events/1
