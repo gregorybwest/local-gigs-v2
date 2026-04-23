@@ -1,9 +1,10 @@
 Rails.application.routes.draw do
   get "search", to: "search#index"
   get "search/results", to: "search#show", as: :search_results
+  match "/404", to: "errors#not_found", via: :all
   resources :events
   resources :users, except: [ :new, :create ]
-  resources :venues, only: [ :index, :show, :create ] do
+  resources :venues, only: [ :show, :create ] do
     collection do
       get :search
     end
