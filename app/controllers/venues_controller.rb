@@ -1,11 +1,6 @@
 class VenuesController < ApplicationController
   skip_forgery_protection only: [ :create ]
 
-  def index
-    @venues = Venue.all
-    render json: @venues.map { |v| venue_json(v, source: "local") }
-  end
-
   def show
     @venue = Venue.find(params[:id])
     @events = @venue.events.order(show_time: :asc)
