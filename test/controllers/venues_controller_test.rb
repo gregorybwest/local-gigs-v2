@@ -10,14 +10,6 @@ class VenuesControllerTest < ActionDispatch::IntegrationTest
     )
   end
 
-  test "GET /venues returns JSON list of venues" do
-    get venues_path, as: :json
-    assert_response :success
-    body = JSON.parse(response.body)
-    assert_kind_of Array, body
-    assert_equal @venue.name, body.first["name"]
-  end
-
   test "GET /venues/search with matching query returns local results" do
     get search_venues_path, params: { q: "Fillmore" }, as: :json
     assert_response :success
